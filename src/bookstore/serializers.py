@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from bookstore.models import Book
 
 
@@ -20,7 +19,7 @@ class BookSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """
-        Update and return an existing `Snippet` instance, given the validated data.
+        Update and return an existing `Book` instance, given the validated data.
         """
         instance.external_id = validated_data.get("external_id", instance.external_id)
         instance.title = validated_data.get("title", instance.title)
@@ -29,7 +28,7 @@ class BookSerializer(serializers.ModelSerializer):
         instance.published_year = validated_data.get(
             "published_year", instance.published_year
         )
-        instance.thumbnail = validated_data.get("thumbnail", instance.thumbnailq)
+        instance.thumbnail = validated_data.get("thumbnail", instance.thumbnail)
         instance.save()
         return instance
 
