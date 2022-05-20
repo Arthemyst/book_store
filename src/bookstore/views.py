@@ -15,7 +15,6 @@ class BookFilter(filters.FilterSet):
         model = Book
         fields = [
             "title",
-            "authors",
             "published_year",
             "acquired",
         ]
