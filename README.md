@@ -13,7 +13,7 @@ $ cd book_store
 
 This project requires Python 3.6 or later.
 
-Create a virtual environment to install dependencies in and activate it:
+Create a virtual environment and activate it:
 
 Linux:
 ```sh

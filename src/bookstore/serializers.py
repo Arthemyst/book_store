@@ -9,7 +9,7 @@ class BookSerializer(serializers.ModelSerializer):
     title = serializers.CharField(required=False, max_length=100)
     authors = serializers.JSONField(required=False)
     acquired = serializers.BooleanField(required=False, default=False)
-    published_year = serializers.IntegerField(required=False)
+    published_year = serializers.CharField(required=False)
     thumbnail = serializers.CharField(required=False, max_length=300)
 
     def create(self, validated_data):

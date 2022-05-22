@@ -4,3 +4,4 @@ djangorestframework==3.12.4
 psycopg2-binary==2.9.3
 pytz==2022.1
 django-filter==21.1
+requests==2.27.1
