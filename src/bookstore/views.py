@@ -44,30 +44,9 @@ class BookDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
-    def patch(self, request, *args, **kwargs):
-        book_object = Book.objects.get()
-        data = request.data
-
-        book_object.external_id = data.get("external_id", book_object.external_id)
-        book_object.title = data.get("title", book_object.title)
-        book_object.authors = data.get("authors", book_object.authors)
-        book_object.acquired = data.get("acquired", book_object.acquired)
-        book_object.published_year = data.get("published_year", book_object.published_year)
-        book_object.thumbnail = data.get("thumbnail", book_object.thumbnail)
-
-        book_object.save()
-        serializer = BookSerializer(book_object, partial=True)
-        return Response(serializer.data)
-
-    def partial_update(self, request, *args, **kwargs):
-        book_object = Book.objects.get()
-        data = request.data
-        book_object.external_id = data.get("external_id", book_object.external_id)
-        book_object.title = data.get("title", book_object.title)
-        book_object.authors = data.get("authors", book_object.authors)
-        book_object.acquired = data.get("acquired", book_object.acquired)
-        book_object.published_year = data.get("published_year", book_object.published_year)
-        book_object.thumbnail = data.get("thumbnail", book_object.thumbnail)
+    def get_serializer(self, *args, **kwargs):
+        kwargs["partial"] = True
+        return super(BookDetail, self).get_serializer(*args, **kwargs)
 
 
 
