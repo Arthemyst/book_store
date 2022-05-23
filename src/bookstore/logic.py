@@ -1,4 +1,5 @@
 import requests
+
 from bookstore.exceptions import WrongDictKey
 from bookstore.models import Book
 

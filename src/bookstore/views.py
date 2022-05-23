@@ -2,10 +2,10 @@ from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from bookstore.filters import BookFilter
+from bookstore.logic import book_load, book_requests
 from bookstore.models import Book
 from bookstore.serializers import BookSerializer
-from bookstore.filters import BookFilter
-from bookstore.logic import book_requests, book_load
 
 
 class BookList(generics.ListCreateAPIView):

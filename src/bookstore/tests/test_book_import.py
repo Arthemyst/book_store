@@ -1,6 +1,7 @@
 import pytest
-from bookstore.logic import book_requests, book_load
+
 from bookstore.exceptions import WrongDictKey
+from bookstore.logic import book_load, book_requests
 
 
 def test_wrong_key_in_dict_for_book_authors():
