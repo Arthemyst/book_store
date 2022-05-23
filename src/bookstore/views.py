@@ -2,11 +2,10 @@ from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from bookstore.exceptions import WrongDictKey
-from bookstore.filters import BookFilter
-from bookstore.logic import book_requests
 from bookstore.models import Book
 from bookstore.serializers import BookSerializer
+from bookstore.filters import BookFilter
+from bookstore.logic import book_requests, book_load
 
 
 class BookList(generics.ListCreateAPIView):
@@ -24,28 +23,10 @@ class BookDetail(generics.RetrieveUpdateDestroyAPIView):
 def book_import(request):
     book_data = request.data
     part_url = "https://www.googleapis.com/books/v1/volumes"
-    try:
-        books = book_requests(book_data, part_url)
-    except KeyError as e:
-        raise WrongDictKey("Wrong key value in dictionary (must be 'authors')")
 
-    counter = 0
-    for book in books["items"]:
-        try:
+    books = book_requests(book_data, part_url)
 
-            _, created = Book.objects.update_or_create(
-                external_id=book["id"],
-                defaults={
-                    "title": book["volumeInfo"]["title"],
-                    "authors": book["volumeInfo"]["authors"],
-                    "published_year": book["volumeInfo"]["publishedDate"][:4],
-                    "thumbnail": book["volumeInfo"]["imageLinks"]["thumbnail"],
-                },
-            )
-            if created:
-                counter += 1
-        except KeyError:
-            continue
+    counter = book_load(books)
 
     return Response({"imported": counter})
 
