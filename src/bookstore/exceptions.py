@@ -1,0 +1,2 @@
+class WrongDictKey(Exception):
+    pass
