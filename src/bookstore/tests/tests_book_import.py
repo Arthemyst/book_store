@@ -17,6 +17,7 @@ def test_specific_books_load_to_check_get_or_create():
     part_url = "https://www.googleapis.com/books/v1/volumes"
     book_data = {"authors": "Sienkiewicz"}
     books = book_requests(book_data, part_url)
-    counter1 = book_load(books)
-    counter2 = book_load(books)
+    counter1 = book_load(books, book_data)
+    counter2 = book_load(books, book_data)
+    assert len(counter1) == 1
     assert len(counter2) == 0

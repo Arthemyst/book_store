@@ -20,7 +20,7 @@ def book_load(books, x):
     for book in books["items"]:
         book_dict = {}
         try:
-            if x["author"] not in book["volumeInfo"]["authors"][0]:
+            if x["authors"] not in book["volumeInfo"]["authors"][0]:
                 pass
             else:
                 try:
@@ -48,20 +48,21 @@ def book_load(books, x):
                 except KeyError:
                     book_dict["Thumbnail"] = "null"
                 print(book_dict)
+
+            try:
+                _, created = Book.objects.update_or_create(
+                    external_id=book_dict["External_id"],
+                    defaults={
+                        "title": book_dict["Title"],
+                        "authors": book_dict["Authors"],
+                        "published_year": book_dict["Published date"],
+                        "thumbnail": book_dict["Thumbnail"],
+                    },
+                )
+                if created:
+                    counter += 1
+            except KeyError:
+                pass
         except KeyError:
             pass
-
-        """
-        _, created = Book.objects.update_or_create(
-            external_id=book_dict["External_id"],
-            defaults={
-                "title": book_dict['Title'],
-                "authors": book_dict["authors"],
-                "published_year": book_dict["Published date"],
-                "thumbnail": book_dict["Thumbnail"],
-            },
-        )
-        if created:
-            counter += 1
-        """
     return counter
