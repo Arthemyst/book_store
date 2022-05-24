@@ -11,9 +11,4 @@ class BookFilter(filters.FilterSet):
 
     class Meta:
         model = Book
-        fields = [
-            "title",
-            "published_year",
-            "acquired",
-            "authors",
-        ]
+        fields = ["title", "published_year", "acquired", "authors"]

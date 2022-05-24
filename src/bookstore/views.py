@@ -26,7 +26,7 @@ def book_import(request):
 
     books = book_requests(book_data, part_url)
 
-    counter = book_load(books)
+    counter = book_load(books, book_data)
 
     return Response({"imported": counter})
 

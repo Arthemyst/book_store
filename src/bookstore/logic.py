@@ -15,22 +15,53 @@ def book_requests(book_data, part_url):
     return books
 
 
-def book_load(books):
+def book_load(books, x):
     counter = 0
     for book in books["items"]:
+        book_dict = {}
         try:
-
-            _, created = Book.objects.update_or_create(
-                external_id=book["id"],
-                defaults={
-                    "title": book["volumeInfo"]["title"],
-                    "authors": book["volumeInfo"]["authors"],
-                    "published_year": book["volumeInfo"]["publishedDate"][:4],
-                    "thumbnail": book["volumeInfo"]["imageLinks"]["thumbnail"],
-                },
-            )
-            if created:
-                counter += 1
+            if x["author"] not in book["volumeInfo"]["authors"][0]:
+                pass
+            else:
+                try:
+                    book_dict["External_id"] = book["id"]
+                except KeyError:
+                    book_dict["External_id"] = "null"
+                try:
+                    book_dict["Title"] = book["volumeInfo"]["title"]
+                except KeyError:
+                    book_dict["Title"] = "null"
+                try:
+                    book_dict["Authors"] = book["volumeInfo"]["authors"]
+                except KeyError:
+                    book_dict["Authors"] = "null"
+                try:
+                    book_dict["Published date"] = book["volumeInfo"]["publishedDate"][
+                        :4
+                    ]
+                except KeyError:
+                    book_dict["Published date"] = "null"
+                try:
+                    book_dict["Thumbnail"] = book["volumeInfo"]["imageLinks"][
+                        "thumbnail"
+                    ]
+                except KeyError:
+                    book_dict["Thumbnail"] = "null"
+                print(book_dict)
         except KeyError:
-            continue
+            pass
+
+        """
+        _, created = Book.objects.update_or_create(
+            external_id=book_dict["External_id"],
+            defaults={
+                "title": book_dict['Title'],
+                "authors": book_dict["authors"],
+                "published_year": book_dict["Published date"],
+                "thumbnail": book_dict["Thumbnail"],
+            },
+        )
+        if created:
+            counter += 1
+        """
     return counter
