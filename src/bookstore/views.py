@@ -3,9 +3,10 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from bookstore.filters import BookFilter
-from bookstore.logic import book_load, book_requests
+from bookstore.logic import fetch_books_by_author, save_books_to_db
 from bookstore.models import Book
 from bookstore.serializers import BookSerializer
+from bookstore.exceptions import GoogleBooksRequestError
 
 
 class BookList(generics.ListCreateAPIView):
@@ -22,11 +23,16 @@ class BookDetail(generics.RetrieveUpdateDestroyAPIView):
 @api_view(["POST"])
 def book_import(request):
     book_data = request.data
-    part_url = "https://www.googleapis.com/books/v1/volumes"
 
-    books = book_requests(book_data, part_url)
+    if "authors" not in book_data:
+        return Response({"error": "Please specify authors"}, status_code=404)
 
-    counter = book_load(books, book_data)
+    try:
+        books = fetch_books_by_author(book_data["authors"])
+    except GoogleBooksRequestError as exc:
+        return Response({"error": f"Google Books API returned {str(exc)}"})
+
+    counter = save_books_to_db(books, book_data["authors"])
 
     return Response({"imported": counter})
 

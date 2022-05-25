@@ -1,68 +1,51 @@
 import requests
 
-from bookstore.exceptions import WrongDictKey
+from bookstore.exceptions import WrongDictKey, GoogleBooksRequestError
 from bookstore.models import Book
+from bookstore.constants import BASE_URL
 
 
-def book_requests(book_data, part_url):
+def fetch_books_by_author(authors):
 
-    try:
-        r = requests.get(part_url, params={"q": book_data["authors"]})
-    except KeyError as e:
-        raise WrongDictKey("Wrong key value in dictionary (must be 'authors')")
+    r = requests.get(BASE_URL, params={"q": authors})
 
+    if not r.ok:
+        raise GoogleBooksRequestError(r.reason)
     books = r.json()
-    return books
+    return books["items"]
 
 
-def book_load(books, x):
+def is_book_author(author, book):
+    author_matches = False
+    book_authors = book.get("volumeInfo", {}).get("authors", [])
+    for book_author in book_authors:
+        if author in book_author:
+            author_matches = True
+            break
+    return author_matches
+
+
+def save_books_to_db(books, author):
     counter = 0
-    for book in books["items"]:
-        book_dict = {}
-        try:
-            if x["authors"] not in book["volumeInfo"]["authors"][0]:
-                pass
-            else:
-                try:
-                    book_dict["External_id"] = book["id"]
-                except KeyError:
-                    book_dict["External_id"] = "null"
-                try:
-                    book_dict["Title"] = book["volumeInfo"]["title"]
-                except KeyError:
-                    book_dict["Title"] = "null"
-                try:
-                    book_dict["Authors"] = book["volumeInfo"]["authors"]
-                except KeyError:
-                    book_dict["Authors"] = "null"
-                try:
-                    book_dict["Published date"] = book["volumeInfo"]["publishedDate"][
-                        :4
-                    ]
-                except KeyError:
-                    book_dict["Published date"] = "null"
-                try:
-                    book_dict["Thumbnail"] = book["volumeInfo"]["imageLinks"][
-                        "thumbnail"
-                    ]
-                except KeyError:
-                    book_dict["Thumbnail"] = "null"
-                print(book_dict)
+    for book in books:
 
-            try:
-                _, created = Book.objects.update_or_create(
-                    external_id=book_dict["External_id"],
-                    defaults={
-                        "title": book_dict["Title"],
-                        "authors": book_dict["Authors"],
-                        "published_year": book_dict["Published date"],
-                        "thumbnail": book_dict["Thumbnail"],
-                    },
-                )
-                if created:
-                    counter += 1
-            except KeyError:
-                pass
-        except KeyError:
-            pass
+        if not is_book_author(author, book):
+            continue
+
+        _, created = Book.objects.update_or_create(
+            external_id=book.get("id"),
+            defaults={
+                "title": book.get("volumeInfo", {}).get("title"),
+                "authors": book.get("volumeInfo", {}).get("authors"),
+                "published_year": book.get("volumeInfo", {}).get("publishedDate", "")[
+                    :4
+                ],
+                "thumbnail": book.get("volumeInfo", {})
+                .get("imageLinks", {})
+                .get("thumbnail"),
+            },
+        )
+        if created:
+            counter += 1
+
     return counter
