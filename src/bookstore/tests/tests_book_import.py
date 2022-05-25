@@ -1,7 +1,9 @@
 import pytest
+from bookstore.models import Book
 
 from bookstore.exceptions import WrongDictKey
 from bookstore.logic import book_load, book_requests
+from .mockup_variables import author_valid, author_invalid, json_input_valid
 
 
 def test_wrong_key_in_dict_for_book_authors():
@@ -13,11 +15,15 @@ def test_wrong_key_in_dict_for_book_authors():
         books = book_requests(book_data, part_url)
 
 
-def test_specific_books_load_to_check_get_or_create():
-    part_url = "https://www.googleapis.com/books/v1/volumes"
-    book_data = {"authors": "Sienkiewicz"}
-    books = book_requests(book_data, part_url)
-    counter1 = book_load(books, book_data)
-    counter2 = book_load(books, book_data)
-    assert len(counter1) == 1
-    assert len(counter2) == 0
+def test_import_books_by_author_valid():
+    response1 = book_load(json_input_valid, author_valid)
+    response2 = book_load(json_input_valid, author_valid)
+    assert len(response1) == 1
+    assert len(response2) == 0
+    book = Book.objects.get(external_id="ti3Qbej5wg4C")
+    book.delete()
+
+
+def test_import_books_by_author_valid():
+    response = book_load(json_input_valid, author_invalid)
+    assert len(response) == 0
