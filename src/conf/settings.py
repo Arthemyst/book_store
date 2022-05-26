@@ -1,5 +1,8 @@
 from pathlib import Path
+import os
+from django.core.exceptions import ImproperlyConfigured
 
+# import django_heroku
 import environ
 
 """
@@ -26,7 +29,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Take environment variables from .env file
 environ.Env.read_env(BASE_DIR / ".env")
 
-SECRET_KEY = env("SECRET_KEY")
+
+def get_env_variable(var_name):
+    try:
+        return os.environ[var_name]
+    except KeyError:
+        error_msg = "set the %s environment variable" % var_name
+        raise ImproperlyConfigured(error_msg)
+
+
+SECRET_KEY = get_env_variable("SECRET_KEY")
 
 DEBUG = env("DEBUG")
 
@@ -86,9 +98,7 @@ WSGI_APPLICATION = "conf.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    "default": env.db(default="psql://postgres:postgres@127.0.0.1:5432/postgres")
-}
+DATABASES = {"default": env.db(default="sqlite:////tmp/my-tmp-sqlite.db")}
 
 
 # Password validation
@@ -127,3 +137,4 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+# django_heroku.settings(locals())
