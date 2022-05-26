@@ -29,7 +29,7 @@ Then install the dependencies:
 ```
 
 
-Create a .env file in project root directory. The file format can be understood from the example below:
+Create a .env file in src directory. The file format can be understood from the example below:
 ```sh
 DEBUG=True
 SECRET_KEY=your-secret-key # generate your own secret key
@@ -45,5 +45,6 @@ Once `pip` has finished downloading the dependencies:
 To test applications:
 
 ```sh
+(env)$ cd src
 (env)$ python3 -m pytest bookstore/tests/test_book_import.py
 ```
