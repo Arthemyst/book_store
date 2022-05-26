@@ -1,0 +1,26 @@
+{
+  "name": "Bookstore manager app",
+  "description": "Python app to manage bookstore, deployed on heroku",
+  "image": "heroku/python",
+  "repository": "https://github.com/Arthemyst/book_store",
+  "keywords": [
+    "python",
+    "django"
+  ],
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "env": {
+    "SECRET_KEY": {
+      "description": "The secret key for the Django application.",
+      "generator": "secret"
+    }
+  },
+  "environments": {
+    "test": {
+      "scripts": {
+        "test": "python3 -m pytest bookstore/tests/test_book_import.py"
+      }
+    }
+  }
+}

@@ -1,7 +1,6 @@
 Django==4.0.1
 django-environ==0.8.1
 djangorestframework==3.12.4 
-psycopg2-binary==2.9.3
 pytz==2022.1
 django-filter==21.1
 requests==2.27.1
@@ -9,3 +8,4 @@ gunicorn==20.0.4
 pytest==7.1.1
 pytest-django==4.5.2
 pytest-cov==3.0.0
+django-on-heroku==1.1.2
