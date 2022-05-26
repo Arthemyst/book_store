@@ -17,8 +17,8 @@ App give possibility to import books from google api:
 Adress of import page: https://bookstore-pl-123.herokuapp.com/import/
 What to do for import:
 put in post field:
-{"authors":"<surname of author>"} -> ex. {"authors":"Tolkien"}
-If new books imported should be message: {"imported": <count of books>}
+{"authors":"surname of author"} -> ex. {"authors":"Tolkien"}
+If new books imported should be message: {"imported": count of books}
 
 Check books:
 Adress of check list of books page: https://bookstore-pl-123.herokuapp.com/books/
@@ -26,7 +26,7 @@ Is possibility to filter books by title, authors, published year (from specific 
 Possible is to CREATE new book by choosing parameters.
 
 Detail of specific book:
-Adress to check specific book: https://bookstore-pl-123.herokuapp.com/books/<specific id> -> ex. https://bookstore-pl-123.herokuapp.com/books/2
+Adress to check specific book: https://bookstore-pl-123.herokuapp.com/books/"specific id" -> ex. https://bookstore-pl-123.herokuapp.com/books/2
 Possible is to DELETE, PATCH (full or partial update) or PUT
 
 Possible to check version of api:
