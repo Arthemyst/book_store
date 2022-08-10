@@ -10,7 +10,7 @@ def test_import_books_by_author_valid():
     books = fetch_books_by_author(author_valid)
     response1 = save_books_to_db(books, author_valid)
     response2 = save_books_to_db(books, author_valid)
-    assert response1 == 3
+    assert response1 == 5
     assert response2 == 0
     book1 = Book.objects.get(title="Blask fantastyczny Swiat dysku")
     book2 = Book.objects.get(title="Ostatni kontynent")
