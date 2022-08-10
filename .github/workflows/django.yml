@@ -27,10 +27,10 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       env: 
+        ALLOWED_HOSTS: 127.0.0.1
         SECRET_KEY: 6c7org@5v(_*53df-%a^-sx^9y_i-2jymyp7)2=bd1h^6j@%)^
         DEBUG: True
         SQLITE_URL: sqlite:///my-local-sqlite.db
-        ALLOWED_HOSTS: 127.0.0.1
       run: |
         cd src
         python -m pytest bookstore/tests/test_book_import.py
