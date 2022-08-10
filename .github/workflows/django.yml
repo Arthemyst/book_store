@@ -26,6 +26,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Run Tests
+      env: 
+        SECRET_KEY: 6c7org@5v(_*53df-%a^-sx^9y_i-2jymyp7)2=bd1h^6j@%)^
       run: |
         cd src
         python -m pytest bookstore/tests/test_book_import.py
