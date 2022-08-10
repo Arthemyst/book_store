@@ -9,10 +9,7 @@ from .mockup_variables import author_valid, author_invalid
 def test_import_books_by_author_valid():
     books = fetch_books_by_author(author_valid)
     response1 = save_books_to_db(books, author_valid)
-    response2 = save_books_to_db(books, author_valid)
-    assert response2 == 0
-
-
+    assert response1 != 0
 
 def test_import_books_by_author_invalid():
     books = fetch_books_by_author(author_invalid)
