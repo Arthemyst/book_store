@@ -27,5 +27,5 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
-        cd rsc
+        cd src
         python -m pytest bookstore/tests/test_book_import.py
